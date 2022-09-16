@@ -63,12 +63,26 @@ namespace SimpleDataBase.DataBase.Core
             }
             return null;
         }
+        public static async Task<List<T>> GetAll(Func<T, bool> predicate)
+        {
+            Type classT = typeof(T);
+            string name = classT.Name;
+            int index = Variables.DbSet.FindIndex(x => x.Name == name);
+            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
+            List<T> TList = await Reading<T>.ReadModel(path);
+            IEnumerable<T> res = TList.Where(predicate);
+            if (res != null)
+            {
+                return res.ToList();
+            }
+            return null;
+        }
         public static async Task Update(T model)
         {
             Type classT = typeof(T);
             string name = classT.Name;
             int index = GetClassName.GetClassIndex(classT);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index]}-{name}.txt");
+            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
             var tempModel = data.FirstOrDefault(x => x.Id == model.Id);
             data.Remove(tempModel);
@@ -80,18 +94,31 @@ namespace SimpleDataBase.DataBase.Core
             Type classT = typeof(T);
             string name = classT.Name;
             int index = GetClassName.GetClassIndex(classT);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index]}-{name}.txt");
+            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
             File.Delete(path);
             Variables.DbSet.RemoveAt(index);
+            if (Variables.DbSet.Count > 0)
+            {
+                await Writing<T>.ReWriteInfoDbModel(Variables.DbSet, FileMode.Append);
+            }
+            else
+            {
+                File.Delete("DbSet.txt");
+                if (Directory.EnumerateFiles("DbModels").Count() == 0)
+                {
+                    Directory.Delete("DbModels");
+                }
+            }
         }
         public static async Task Delete(T model)
         {
-            int id = model.Id;
             Type classT = typeof(T);
             string name = classT.Name;
-            string path = Path.Combine("DbModels", $"{id}-{name}.txt");
+            var set = Variables.DbSet.FirstOrDefault(x => x.Name == name);
+            string path = Path.Combine("DbModels", $"{set.Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
-            data.Remove(model);
+            var mod = data.FirstOrDefault(x => x.Id == model.Id);
+            data.Remove(mod);
             int index = GetClassName.GetClassIndex(classT);
             if (data.Count > 0)
             {
@@ -102,6 +129,10 @@ namespace SimpleDataBase.DataBase.Core
             else
             {
                 File.Delete(path);
+                if (Directory.EnumerateFiles("DbModels").Count() == 0)
+                {
+                    Directory.Delete("DbModels");
+                }
                 Variables.DbSet.RemoveAt(index);
                 await Writing<T>.ReWriteInfoDbModel(Variables.DbSet, FileMode.Append);
             }
@@ -110,7 +141,8 @@ namespace SimpleDataBase.DataBase.Core
         {
             Type classT = typeof(T);
             string name = classT.Name;
-            string path = Path.Combine("DbModels", $"{id}-{name}.txt");
+            var set = Variables.DbSet.FirstOrDefault(x => x.Name == name);
+            string path = Path.Combine("DbModels", $"{set.Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
             var model = data.FirstOrDefault(x => x.Id == id);
             data.Remove(model);

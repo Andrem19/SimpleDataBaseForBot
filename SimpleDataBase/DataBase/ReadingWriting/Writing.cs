@@ -69,7 +69,7 @@ namespace SimpleDataBase.DataBase.ReadingWriting
             File.Delete(filename);
             for (int i = 0; i < modelList.Count; i++)
             {
-                string output = JsonConvert.SerializeObject(modelList);
+                string output = JsonConvert.SerializeObject(modelList[i]);
                 using (FileStream file = new FileStream(filename, fileMode))
                 using (StreamWriter stream = new StreamWriter(file))
                     stream.WriteLine(output);
@@ -80,7 +80,7 @@ namespace SimpleDataBase.DataBase.ReadingWriting
             File.Delete(path);
             for (int i = 0; i < modelList.Count; i++)
             {
-                string output = JsonConvert.SerializeObject(modelList);
+                string output = JsonConvert.SerializeObject(modelList[i]);
                 using (FileStream file = new FileStream(path, fileMode))
                 using (StreamWriter stream = new StreamWriter(file))
                     stream.WriteLine(output);

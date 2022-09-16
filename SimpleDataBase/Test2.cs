@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase
 {
-    public class TestModel : ID
+    internal class Test2 : ID
     {
-        public TestModel(string name, int number)
+        public Test2(int myProperty)
         {
-            Name = name;
-            Number = number;
+            MyProperty = myProperty;
         }
     
-        public string Name { get; set; }
-        public int Number { get; set; }
+        public int MyProperty { get; set; }
     }
 }
