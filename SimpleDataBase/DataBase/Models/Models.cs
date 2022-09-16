@@ -12,7 +12,7 @@ namespace SimpleDataBase.DataBase.Models
         {
 
         }
-        public Models(int id, string name, long count)
+        public Models(int id, string name, int count)
         {
             Id = id;
             Name = name;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleDataBase.DataBase.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,12 @@ namespace SimpleDataBase.DataBase.Helpers
         {
             string[] subs = path.Split('-');
             return subs[subs.Length - 1];
+        }
+        public static int GetClassIndex(Type classT)
+        {
+            string name = classT.Name;
+
+            return Variables.DbSet.FindIndex(x => x.Name == name);
         }
     }
 }
