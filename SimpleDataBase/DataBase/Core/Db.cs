@@ -156,6 +156,10 @@ namespace SimpleDataBase.DataBase.Core
             else
             {
                 File.Delete(path);
+                if (Directory.EnumerateFiles("DbModels").Count() == 0)
+                {
+                    Directory.Delete("DbModels");
+                }
                 Variables.DbSet.RemoveAt(index);
                 await Writing<T>.ReWriteInfoDbModel(Variables.DbSet, FileMode.Append);
             }
