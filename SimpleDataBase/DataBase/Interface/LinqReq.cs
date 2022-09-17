@@ -1,4 +1,5 @@
-﻿using SimpleDataBase.DataBase.Models;
+﻿using SimpleDataBase.DataBase.JsonToCSharp;
+using SimpleDataBase.DataBase.Models;
 using SimpleDataBase.DataBase.ReadingWriting;
 using System;
 using System.Collections.Generic;
@@ -8,45 +9,79 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.Interface
 {
-    public static class LinqReq<T> where T : ID<T>
+    public static class LinqReq
     {
-        public static async Task<T> GetClass(string NameOfClass, int id)
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, bool Value)
         {
-            string name = Variables.DbSet.FirstOrDefault(x => x.Name == NameOfClass).Name;
-            int index = Variables.DbSet.FindIndex(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
-            List<T> TList = await Reading<T>.ReadModel(path);
-            T res = TList.Find(x => x.Id == id);
-            if (res != null)
-            {
-                return res;
-            }
-            return null;
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueBool == Value));
         }
-        public static async Task<T> GetClass(string NameOfClass, Predicate<T> predicate)
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, string Value)
         {
-            string name = Variables.DbSet.FirstOrDefault(x => x.Name == NameOfClass).Name;
-            int index = Variables.DbSet.FindIndex(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
-            List<T> TList = await Reading<T>.ReadModel(path);
-            T res = TList.Find(predicate);
-            if (res != null)
-            {
-                return res;
-            }
-            return null;
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueString == Value));
         }
-        public static async Task<List<T>> GetAll(string name, Func<T, bool> predicate)
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, int Value)
         {
-            int index = Variables.DbSet.FindIndex(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
-            List<T> TList = await Reading<T>.ReadModel(path);
-            IEnumerable<T> res = TList.Where(predicate);
-            if (res != null)
-            {
-                return res.ToList();
-            }
-            return null;
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value));
+        }
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, string Value, string PropertyName2, string Value2)
+        {
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueString == Value) && x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2));
+        }
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, int Value2)
+        {
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) && x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueInt == Value2));
+        }
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, string Value2)
+        {
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) && x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2));
+        }
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, int Value2, bool or)
+        {
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) || x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueInt == Value2));
+        }
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, string Value2, bool or)
+        {
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) || x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2));
+        }
+        public static async Task<Universal> GetInstance(this List<Universal> uni, string PropertyName, string Value, string PropertyName2, string Value2, bool or)
+        {
+            return uni.FirstOrDefault(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueString == Value) || x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2));
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, bool Value)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueBool == Value)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, string Value)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueString == Value)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, int Value)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, string Value, string PropertyName2, string Value2)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueString == Value) && x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, int Value2)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) && x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueInt == Value2)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, string Value2)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) && x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, int Value2, bool or)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) || x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueInt == Value2)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, int Value, string PropertyName2, string Value2, bool or)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueInt == Value) || x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2)).ToList();
+        }
+        public static async Task<List<Universal>> GetInstances(this List<Universal> uni, string PropertyName, string Value, string PropertyName2, string Value2, bool or)
+        {
+            return uni.Where(x => x.Properties.Exists(c => c.Name == PropertyName && c.ValueString == Value) || x.Properties.Exists(c => c.Name == PropertyName2 && c.ValueString == Value2)).ToList();
         }
     }
 }

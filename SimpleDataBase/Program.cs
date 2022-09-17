@@ -41,6 +41,12 @@ namespace Data
             await Db<Universal>.Update("TestModel", Andrew);
             var re = Variables.DbSet;
             TestM = await Db<Universal>.GetSet("TestModel");
+            //Тест LinqReq
+
+            //Test non Universal all cycle
+
+            //await Db<TestModel>.GetAll(x => x.Name == "Andrew");
+
             ////Test2 test = new Test2(12);
             ////await Db<Test2>.Add(test);
             //await Db<TestModel>.Add(model1);

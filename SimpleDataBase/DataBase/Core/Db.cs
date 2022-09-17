@@ -1,4 +1,5 @@
 ﻿using SimpleDataBase.DataBase.Helpers;
+using SimpleDataBase.DataBase.JsonToCSharp;
 using SimpleDataBase.DataBase.Models;
 using SimpleDataBase.DataBase.ReadingWriting;
 using System;
@@ -31,7 +32,7 @@ namespace SimpleDataBase.DataBase.Core
             string path = Path.Combine("DbModels", $"{Variables.DbSet[ind].Id}-{Variables.DbSet[ind].Name}.txt");
             return await Reading<T>.ReadModel(path);
         }
-
+        
         public static async Task Update(string name, T model)
         {
             int index = Variables.DbSet.FindIndex(x => x.Name == name);
@@ -110,6 +111,65 @@ namespace SimpleDataBase.DataBase.Core
                 Variables.DbSet.RemoveAt(index);
                 await Writing<T>.ReWriteInfoDbModel(Variables.DbSet, FileMode.Append);
             }
+        }
+        ///<summary>
+        ///Don't use with Universal instance.
+        ///</summary>
+        public static async Task<T> GetClass(int id)
+        {
+            if (typeof(T).Name != "Universal")
+            {
+                string NameOfClass = typeof(T).Name;
+                string name = Variables.DbSet.FirstOrDefault(x => x.Name == NameOfClass).Name;
+                int index = Variables.DbSet.FindIndex(x => x.Name == name);
+                string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
+                List<T> TList = await Reading<T>.ReadModel(path);
+                T res = TList.Find(x => x.Id == id);
+                if (res != null)
+                {
+                    return res;
+                }
+            }
+            return null;
+        }
+        ///<summary>
+        ///Don't use with Universal instance.
+        ///</summary>
+        public static async Task<T> GetClass(Predicate<T> predicate)
+        {
+            if (typeof(T).Name != "Universal")
+            {
+                string NameOfClass = typeof(T).Name;
+                string name = Variables.DbSet.FirstOrDefault(x => x.Name == NameOfClass).Name;
+                int index = Variables.DbSet.FindIndex(x => x.Name == name);
+                string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
+                List<T> TList = await Reading<T>.ReadModel(path);
+                T res = TList.Find(predicate);
+                if (res != null)
+                {
+                    return res;
+                }
+            }
+            return null;
+        }
+        ///<summary>
+        ///Don't use with Universal instance.
+        ///</summary>
+        public static async Task<List<T>> GetAll(Func<T, bool> predicate)
+        {
+            if (typeof(T).Name != "Universal")
+            {
+                string name = typeof(T).Name;
+                int index = Variables.DbSet.FindIndex(x => x.Name == name);
+                string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{Variables.DbSet[index].Name}.txt");
+                List<T> TList = await Reading<T>.ReadModel(path);
+                IEnumerable<T> res = TList.Where(predicate);
+                if (res != null)
+                {
+                    return res.ToList();
+                }
+            }
+            return null;
         }
     }
 }
