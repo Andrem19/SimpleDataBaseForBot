@@ -13,5 +13,10 @@ namespace SimpleDataBase.DataBase.Helpers
         {
             return uni.Properties.FindIndex(x => x.Name == PropertyName);
         }
+        public static Property GetProp(this Universal uni, string PropertyName)
+        {
+            int index = uni.Properties.FindIndex(x => x.Name == PropertyName);
+            return uni.Properties[index];
+        }
     }
 }

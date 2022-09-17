@@ -36,6 +36,7 @@ namespace Data
             Universal Ira = TestM.FirstOrDefault(x => x.Properties.Exists(c => c.Name == "Name" && c.ValueString == "Ira"));
             Universal Andrew = TestM.FirstOrDefault(x => x.Properties.Exists(c => c.Name == "Number" && c.ValueInt == 31) && x.Properties.Exists(c => c.Name == "Name" && c.ValueString == "Andrew"));
             Andrew.Properties[Andrew.GetIndex("Number")].ValueInt = 32;
+            Andrew.GetProp("Name").ValueString = "Oscar";
             await Db<Universal>.Delete("TestModel", Ira);
             await Db<Universal>.Update("TestModel", Andrew);
             var re = Variables.DbSet;
@@ -63,7 +64,7 @@ namespace Data
             //List<TestModel> TestM2 = await Db<TestModel>.GetSet();
             //await Init.StartInit();
             //var res3 = Variables.DbSet;
-            //await Db<TestModel>.DeleteSet();
+            await Db<Universal>.DeleteSet("TestModel");
         }
     }
 }
