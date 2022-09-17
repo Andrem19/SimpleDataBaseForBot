@@ -26,15 +26,22 @@ namespace SimpleDataBase.DataBase.Core
                 return await Writing<T>.WriteModel($"{Variables.DbSet[index].Id}-{name}", model, FileMode.Append);
             }
         }
-        public static async Task<List<T>> GetSet(string name)
+        public static async Task<List<T>> GetSet(string name = null)
         {
+            if (string.IsNullOrEmpty(name))
+                name = typeof(T).Name;
             int ind = Variables.DbSet.FindIndex(x => x.Name == name);
             string path = Path.Combine("DbModels", $"{Variables.DbSet[ind].Id}-{Variables.DbSet[ind].Name}.txt");
             return await Reading<T>.ReadModel(path);
         }
-        
-        public static async Task Update(string name, T model)
+        ///<summary>
+        ///With Universal instance need name.
+        ///</summary>
+        public static async Task Update(T model, string name = null)
         {
+            if (string.IsNullOrEmpty(name))
+                name = typeof(T).Name;
+
             int index = Variables.DbSet.FindIndex(x => x.Name == name);
             string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
@@ -43,8 +50,10 @@ namespace SimpleDataBase.DataBase.Core
             data.Add(model);
             await Writing<T>.ReWrite(path, data, FileMode.Append);
         }
-        public static async Task DeleteSet(string name)
+        public static async Task DeleteSet(string name = null)
         {
+            if (string.IsNullOrEmpty(name))
+                name = typeof(T).Name;
             int index = Variables.DbSet.FindIndex(x => x.Name == name);
             string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
             File.Delete(path);
@@ -62,8 +71,10 @@ namespace SimpleDataBase.DataBase.Core
                 }
             }
         }
-        public static async Task Delete(string name, T model)
+        public static async Task Delete(T model, string name = null)
         {
+            if (string.IsNullOrEmpty(name))
+                name = typeof(T).Name;
             var set = Variables.DbSet.FirstOrDefault(x => x.Name == name);
             string path = Path.Combine("DbModels", $"{set.Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
@@ -87,8 +98,10 @@ namespace SimpleDataBase.DataBase.Core
                 await Writing<T>.ReWriteInfoDbModel(Variables.DbSet, FileMode.Append);
             }
         }
-        public static async Task Delete(string name, int id)
+        public static async Task Delete(int id, string name = null)
         {
+            if (string.IsNullOrEmpty(name))
+                name = typeof(T).Name;
             var set = Variables.DbSet.FirstOrDefault(x => x.Name == name);
             string path = Path.Combine("DbModels", $"{set.Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);

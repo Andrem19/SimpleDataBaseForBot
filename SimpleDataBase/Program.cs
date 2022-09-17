@@ -6,6 +6,8 @@ using SimpleDataBase.DataBase.Core;
 using SimpleDataBase.DataBase.Helpers;
 using SimpleDataBase.DataBase.JsonToCSharp;
 using System.Text.RegularExpressions;
+using SimpleDataBase.DataBase.Interface;
+using System.Text;
 
 namespace Data
 {
@@ -37,40 +39,46 @@ namespace Data
             Universal Andrew = TestM.FirstOrDefault(x => x.Properties.Exists(c => c.Name == "Number" && c.ValueInt == 31) && x.Properties.Exists(c => c.Name == "Name" && c.ValueString == "Andrew"));
             Andrew.Properties[Andrew.GetIndex("Number")].ValueInt = 32;
             Andrew.GetProp("Name").ValueString = "Oscar";
-            await Db<Universal>.Delete("TestModel", Ira);
-            await Db<Universal>.Update("TestModel", Andrew);
+            await Db<Universal>.Delete(Ira, "TestModel");
+            await Db<Universal>.Update(Andrew, "TestModel");
             var re = Variables.DbSet;
+            await Db<Universal>.Add(uniModel2);
             TestM = await Db<Universal>.GetSet("TestModel");
             //Тест LinqReq
+            var er1 = LinqReq.GetInstance(TestM, "Name", "Oscar");
+            var er2 = LinqReq.GetInstance(TestM, "Number", 32);
+            var er3 = LinqReq.GetInstancesMore(TestM, "Number", 18);
+            var er44 = LinqReq.GetInstances(LinqReq.GetInstancesLess(TestM, "Number", 29), "Name", "Ira", "Number", 27);
+            await Db<Universal>.DeleteSet("TestModel");
+
 
             //Test non Universal all cycle
-
-            //await Db<TestModel>.GetAll(x => x.Name == "Andrew");
-
-            ////Test2 test = new Test2(12);
-            ////await Db<Test2>.Add(test);
-            //await Db<TestModel>.Add(model1);
-            //await Db<TestModel>.Add(model2);
-            //await Db<TestModel>.Add(model3);
-            //await Db<TestModel>.Add(model4);
-            //var res = Variables.DbSet;
-            //List<TestModel> TestM = await Db<TestModel>.GetSet();
-            //TestModel Gabi = TestM.FirstOrDefault(x => x.Name == "Gabi");
-            //TestModel Yan = TestM.FirstOrDefault(x => x.Name == "Yan");
-            //TestModel Ira = TestM.FirstOrDefault(x => x.Name == "Ira");
-            //TestModel Andrew = TestM.FirstOrDefault(x => x.Name == "Andrew");
-            //TestModel Gb = await Db<TestModel>.GetClass(Gabi.Id);
-            //TestModel And = await Db<TestModel>.GetClass(x => x.Number == 31);
-            //List<TestModel> AllAdult = await Db<TestModel>.GetAll(x => x.Number > 18);
-            //And.Number = 32;
-            //await Db<TestModel>.Update(And);
-            //await Db<TestModel>.Delete(Ira);
-            //await Db<TestModel>.Delete(Gabi.Id);
-            //var res2 = Variables.DbSet;
-            //List<TestModel> TestM2 = await Db<TestModel>.GetSet();
-            //await Init.StartInit();
-            //var res3 = Variables.DbSet;
-            await Db<Universal>.DeleteSet("TestModel");
+            Test2 test21 = new Test2(12);
+            await Db<Test2>.Add(test);
+            await Db<TestModel>.Add(model1);
+            await Db<TestModel>.Add(model2);
+            await Db<TestModel>.Add(model3);
+            await Db<TestModel>.Add(model4);
+            var res = Variables.DbSet;
+            List<TestModel> TestM2 = await Db<TestModel>.GetSet();
+            TestModel Gabi = TestM2.FirstOrDefault(x => x.Number == 9);
+            TestModel Yan = TestM2.FirstOrDefault(x => x.Name == "Yan");
+            TestModel Ira2 = TestM2.FirstOrDefault(x => x.Name == "Ira");
+            TestModel Andrew2 = TestM2.FirstOrDefault(x => x.Name == "Andrew");
+            TestModel Gb = await Db<TestModel>.GetClass(Gabi.Id);
+            TestModel And = await Db<TestModel>.GetClass(x => x.Number == 31);
+            And.Name = "Omar";
+            List<TestModel> AllAdult = await Db<TestModel>.GetAll(x => x.Number > 18);
+            And.Number = 32;
+            var res3 = await Db<TestModel>.GetAll(x => x.Number < 12);
+            await Db<TestModel>.Update(And);
+            await Db<TestModel>.Delete(Ira2);
+            await Db<TestModel>.Delete(Gabi.Id);
+            var res2 = Variables.DbSet;
+            List<TestModel> TestM22 = await Db<TestModel>.GetSet();
+            await Init.StartInit();
+            var res31 = Variables.DbSet;
+            await Db<TestModel>.DeleteSet();
         }
     }
 }
