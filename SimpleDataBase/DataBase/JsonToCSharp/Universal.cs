@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.JsonToCSharp
 {
-    public class Universal : ID
+    public class Universal
     {
         public Universal(string name)
         {

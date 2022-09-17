@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.ReadingWriting
 {
-    public static class Writing<T> where T : ID
+    public static class Writing<T> where T : ID<T>
     {
         public async static Task<int> WriteModel(string filename, T model, FileMode fileMode)
         {

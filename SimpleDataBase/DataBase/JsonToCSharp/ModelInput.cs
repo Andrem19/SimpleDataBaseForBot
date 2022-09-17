@@ -10,10 +10,10 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
     {
         public ModelInput(string name, object value)
         {
-            Name = name;
+            NameOfClass = name;
             Value = value;
         }
-        public string Name { get; set; }
+        public string NameOfClass { get; set; }
         public object Value { get; set; }
     }
 }

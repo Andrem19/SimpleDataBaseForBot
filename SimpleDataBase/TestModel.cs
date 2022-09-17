@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase
 {
-    public class TestModel : ID
+    public class TestModel : ID<TestModel>
     {
         public TestModel(string name, int number, Test2 prop)
         {
@@ -22,11 +22,11 @@ namespace SimpleDataBase
             PropStrL = new List<string> { "First", "Second", "Third" };
             Prop = prop;
             bl = true;
-            gd = new Guid();
+            gd = Guid.NewGuid();
             dt = new DateTime(2000, 12, 5, 15, 45, 0);
             ts = TimeSpan.FromDays(3);
             fl = 100f;
-            db = 1550.6;
+            db = 1550.54;
         }
     
         public string Name { get; set; }

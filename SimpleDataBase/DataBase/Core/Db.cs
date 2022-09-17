@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.Core
 {
-    public static class Db<T> where T : ID
+    public static class Db<T> where T : ID<T>
     {
         public static async Task<int> Add(T model)
         {

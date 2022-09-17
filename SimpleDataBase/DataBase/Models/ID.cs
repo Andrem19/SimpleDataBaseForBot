@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.Models
 {
-    public class ID
+    public class ID<T> where T : class
     {
         public int Id { get; set; }
+        public string NameOfClass { get; set; }
         public ID()
         {
-
+            NameOfClass = typeof(T).Name;
         }
     }
 }

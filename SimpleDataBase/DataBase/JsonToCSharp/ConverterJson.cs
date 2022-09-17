@@ -10,11 +10,10 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
 {
     public static class ConverterJson
     {
-        public static Universal ToCSharpClass(ModelInput obj)
+        public static Universal ToCSharpClass(string obj)
         {
-            var json = JsonConvert.SerializeObject(obj.Value);
-            JObject jsonObj = JObject.Parse(json);
-            return FromJObj(jsonObj, obj.Name);
+            JObject jsonObj = JObject.Parse(obj);
+            return FromJObj(jsonObj, jsonObj["NameOfClass"].ToString());
         }
         public static Universal FromJObj(JObject jsonObj, String name)
         {
@@ -97,7 +96,6 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
                     }
                 }
             }
-
             return universal;
         }
     }

@@ -19,10 +19,20 @@ namespace Data
             TestModel model2 = new TestModel("Ira", 27, test);
             TestModel model3 = new TestModel("Gabi", 9, test);
             TestModel model4 = new TestModel("Yan", 6, test);
-            ModelInput model = new ModelInput("TestModel", model1);
-            var uniModel = ConverterJson.ToCSharpClass(model);
-            Console.WriteLine();
-
+            //ModelInput model = new ModelInput("TestModel", model1);
+            string json = JsonConvert.SerializeObject(model1);
+            Universal uniModel = ConverterJson.ToCSharpClass(json);
+            string res = uniModel.ToJson();
+            if (json == res)
+            {
+                Console.WriteLine("SUCCESS");
+            }
+            uniModel = ConverterJson.ToCSharpClass(res);
+            res = uniModel.ToJson();
+            if (json == res)
+            {
+                Console.WriteLine("SUCCESS");
+            }
             //string str = Regex.Replace(json, "[^a-zA-Z0-9,:']", String.Empty);
             //string[] res = str.Split(new[] { '\u002C' }, StringSplitOptions.RemoveEmptyEntries);
             //Dictionary<string, string> r = new Dictionary<string, string>();
