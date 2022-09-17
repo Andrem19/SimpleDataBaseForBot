@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SimpleDataBase;
 using SimpleDataBase.DataBase;
 using SimpleDataBase.DataBase.Core;
@@ -13,19 +14,23 @@ namespace Data
         public static async Task Main()
         {
             await Init.StartInit();
-            TestModel model1 = new TestModel("Andrew", 31);
-            TestModel model2 = new TestModel("Ira", 27);
-            TestModel model3 = new TestModel("Gabi", 9);
-            TestModel model4 = new TestModel("Yan", 6);
-            var json = JsonConvert.SerializeObject(model1);
-            string str = Regex.Replace(json, "[^a-zA-Z0-9,:]", String.Empty);
-            string[] res = str.Split(new[] { '\u002C' }, StringSplitOptions.RemoveEmptyEntries);
-            Dictionary<string, string> r = new Dictionary<string, string>();
-            for (int i = 0; i < res.Length; i++)
-            {
-                string[] d = res[i].Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                r.Add(d[0], d[1]);
-            }
+            Test2 test = new Test2(12);
+            TestModel model1 = new TestModel("Andrew", 31, test);
+            TestModel model2 = new TestModel("Ira", 27, test);
+            TestModel model3 = new TestModel("Gabi", 9, test);
+            TestModel model4 = new TestModel("Yan", 6, test);
+            ModelInput model = new ModelInput("TestModel", model1);
+            var uniModel = ConverterJson.ToCSharpClass(model);
+            Console.WriteLine();
+
+            //string str = Regex.Replace(json, "[^a-zA-Z0-9,:']", String.Empty);
+            //string[] res = str.Split(new[] { '\u002C' }, StringSplitOptions.RemoveEmptyEntries);
+            //Dictionary<string, string> r = new Dictionary<string, string>();
+            //for (int i = 0; i < res.Length; i++)
+            //{
+            //    string[] d = res[i].Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+            //    r.Add(d[0], d[1]);
+            //}
             ////Test2 test = new Test2(12);
             ////await Db<Test2>.Add(test);
             //await Db<TestModel>.Add(model1);
@@ -50,7 +55,6 @@ namespace Data
             //await Init.StartInit();
             //var res3 = Variables.DbSet;
             //await Db<TestModel>.DeleteSet();
-            var uni = new Universal<List<string>, string>();
         }
     }
 }

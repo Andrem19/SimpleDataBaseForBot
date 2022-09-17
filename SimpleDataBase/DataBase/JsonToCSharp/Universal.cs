@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SimpleDataBase.DataBase.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +8,27 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.JsonToCSharp
 {
-    public class Universal<T1, T2>
+    public class Universal : ID
     {
+        public Universal(string name)
+        {
+            Name = name;
+        }
         public string Name { get; set; }
-        public Dictionary<T1, T2> Values { get; set; }
+        public List<Property> Properties { get; set; } = new List<Property>();
+    }
+    public class Property
+    {
+        public string Type { get; set; }
+        public string Name { get; set; }
+        public string? ValueString { get; set; }
+        public int? ValueInt { get; set; }
+        public bool? ValueBool { get; set; }
+        public float? ValueFloat { get; set; }
+        public DateTime? ValueDate { get; set; }
+        public List<string>? ValueListString { get; set; }
+        public List<int>? ValueListInt { get; set; }
+        public Universal? ValueObject { get; set; }
+        public List<Universal>? ValueListObject { get; set; }
     }
 }

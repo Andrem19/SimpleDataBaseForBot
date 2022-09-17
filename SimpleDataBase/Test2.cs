@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase
 {
-    internal class Test2 : ID
+    public class Test2 : ID
     {
         public Test2(int myProperty)
         {
