@@ -19,28 +19,27 @@ namespace Data
             TestModel model2 = new TestModel("Ira", 27, test);
             TestModel model3 = new TestModel("Gabi", 9, test);
             TestModel model4 = new TestModel("Yan", 6, test);
-            //ModelInput model = new ModelInput("TestModel", model1);
-            string json = JsonConvert.SerializeObject(model1);
-            Universal uniModel = ConverterJson.ToCSharpClass(json);
-            string res = uniModel.ToJson();
-            if (json == res)
-            {
-                Console.WriteLine("SUCCESS");
-            }
-            uniModel = ConverterJson.ToCSharpClass(res);
-            res = uniModel.ToJson();
-            if (json == res)
-            {
-                Console.WriteLine("SUCCESS");
-            }
-            //string str = Regex.Replace(json, "[^a-zA-Z0-9,:']", String.Empty);
-            //string[] res = str.Split(new[] { '\u002C' }, StringSplitOptions.RemoveEmptyEntries);
-            //Dictionary<string, string> r = new Dictionary<string, string>();
-            //for (int i = 0; i < res.Length; i++)
-            //{
-            //    string[] d = res[i].Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-            //    r.Add(d[0], d[1]);
-            //}
+
+            string json1 = JsonConvert.SerializeObject(model1);
+            string json2 = JsonConvert.SerializeObject(model2);
+            string json3 = JsonConvert.SerializeObject(model3);
+            string json4 = JsonConvert.SerializeObject(model4);
+            Universal uniModel1 = ConverterJson.ToCSharpClass(json1);
+            Universal uniModel2 = ConverterJson.ToCSharpClass(json2);
+            Universal uniModel3 = ConverterJson.ToCSharpClass(json3);
+            Universal uniModel4 = ConverterJson.ToCSharpClass(json4);
+            await Db<Universal>.Add(uniModel1);
+            await Db<Universal>.Add(uniModel2);
+            await Db<Universal>.Add(uniModel3);
+            await Db<Universal>.Add(uniModel4);
+            List<Universal> TestM = await Db<Universal>.GetSet("TestModel");
+            Universal Ira = TestM.FirstOrDefault(x => x.Properties.Exists(c => c.Name == "Name" && c.ValueString == "Ira"));
+            Universal Andrew = TestM.FirstOrDefault(x => x.Properties.Exists(c => c.Name == "Number" && c.ValueInt == 31) && x.Properties.Exists(c => c.Name == "Name" && c.ValueString == "Andrew"));
+            Andrew.Properties[Andrew.GetIndex("Number")].ValueInt = 32;
+            await Db<Universal>.Delete("TestModel", Ira);
+            await Db<Universal>.Update("TestModel", Andrew);
+            var re = Variables.DbSet;
+            TestM = await Db<Universal>.GetSet("TestModel");
             ////Test2 test = new Test2(12);
             ////await Db<Test2>.Add(test);
             //await Db<TestModel>.Add(model1);

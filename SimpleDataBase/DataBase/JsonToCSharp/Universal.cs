@@ -8,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace SimpleDataBase.DataBase.JsonToCSharp
 {
-    public class Universal
+    public class Universal : ID<Universal>
     {
-        public Universal(string name)
-        {
-            Name = name;
-        }
-        public string Name { get; set; }
         public List<Property> Properties { get; set; } = new List<Property>();
     }
     public class Property

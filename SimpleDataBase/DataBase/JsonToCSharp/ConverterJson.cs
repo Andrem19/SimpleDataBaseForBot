@@ -13,11 +13,12 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
         public static Universal ToCSharpClass(string obj)
         {
             JObject jsonObj = JObject.Parse(obj);
-            return FromJObj(jsonObj, jsonObj["NameOfClass"].ToString());
+            return FromJObj(jsonObj);
         }
-        public static Universal FromJObj(JObject jsonObj, String name)
+        public static Universal FromJObj(JObject jsonObj)
         {
-            Universal universal = new Universal(name);
+            Universal universal = new Universal();
+            universal.NameOfClass = jsonObj["NameOfClass"].ToString();
             IList<string> keys = jsonObj.Properties().Select(p => p.Name).ToList();
             var types = jsonObj.Properties().Select(v => v.Value.Type).ToList();
             for (int i = 0; i < keys.Count; i++)
@@ -52,7 +53,7 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
                 }
                 else if (property.Type == JTokenType.Object.ToString())
                 {
-                    property.ValueObject = FromJObj((JObject)jsonObj.GetValue(property.Name), property.Name);
+                    property.ValueObject = FromJObj((JObject)jsonObj.GetValue(property.Name));
                     universal.Properties.Add(property);
                 }
                 else if (property.Type == JTokenType.Array.ToString())
@@ -64,7 +65,7 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
                         for (int j = 0; j < tes.Count(); j++)
                         {
                             var obj = (JObject)tes[j];
-                            Universal temUni = FromJObj(obj, j.ToString());
+                            Universal temUni = FromJObj(obj);
                             property.ValueListObject.Add(temUni);
                         }
                         property.Type += "O";
