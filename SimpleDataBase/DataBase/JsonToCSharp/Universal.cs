@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SimpleDataBase.DataBase.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace SimpleDataBase.DataBase.JsonToCSharp
     {
         public List<Property> Properties { get; set; } = new List<Property>();
     }
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class Property
     {
         public string Type { get; set; }

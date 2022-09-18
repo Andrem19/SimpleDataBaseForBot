@@ -13,18 +13,22 @@ namespace SimpleDataBase.DataBase.ReadingWriting
     {
         public async static Task<int> WriteModel(string filename, T model, FileMode fileMode)
         {
-            
-            string folderName = $"DbModels";
-            if (!Directory.Exists(folderName))
+            if (!Directory.Exists(Variables.NameOfDB))
             {
-                Directory.CreateDirectory(folderName);
+                Directory.CreateDirectory(Variables.NameOfDB);
             }
-            string path = Path.Combine(folderName, $"{filename}.txt");
+            string folderName = $"DbModels";
+            string p = Path.Combine(Variables.NameOfDB, folderName);
+            if (!Directory.Exists(p))
+            {
+                Directory.CreateDirectory(p);
+            }
+            string path = Path.Combine(Variables.NameOfDB, folderName, $"{filename}.txt");
             if (!File.Exists(path))
             {
                 int Id = Variables.DbSet.Count() + 1;
                 await WriteInfoDbModel(new Models.Models(Id, filename, 1), FileMode.Append);
-                path = Path.Combine(folderName, $"{Id}-{filename}.txt");
+                path = Path.Combine(Variables.NameOfDB, folderName, $"{Id}-{filename}.txt");
                 model.Id = 1;
                 string output = JsonConvert.SerializeObject(model);
                 using (FileStream file = new FileStream(path, fileMode))
@@ -58,19 +62,20 @@ namespace SimpleDataBase.DataBase.ReadingWriting
         {
             Variables.DbSet.Add(model);
             string filename = $"DbSet.txt";
+            string path = Path.Combine(Variables.NameOfDB, filename);
             string output = JsonConvert.SerializeObject(model);
-            using (FileStream file = new FileStream(filename, fileMode))
+            using (FileStream file = new FileStream(path, fileMode))
             using (StreamWriter stream = new StreamWriter(file))
                 stream.WriteLine(output);
         }
         public async static Task ReWriteInfoDbModel(List<Models.Models> modelList, FileMode fileMode)
         {
-            string filename = $"DbSet.txt";
-            File.Delete(filename);
+            string filePath = Path.Combine(Variables.NameOfDB, "DbSet.txt");
+            File.Delete(filePath);
             for (int i = 0; i < modelList.Count; i++)
             {
                 string output = JsonConvert.SerializeObject(modelList[i]);
-                using (FileStream file = new FileStream(filename, fileMode))
+                using (FileStream file = new FileStream(filePath, fileMode))
                 using (StreamWriter stream = new StreamWriter(file))
                     stream.WriteLine(output);
             }

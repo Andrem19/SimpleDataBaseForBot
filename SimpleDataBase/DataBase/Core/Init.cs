@@ -11,7 +11,8 @@ namespace SimpleDataBase.DataBase.Core
     {
         public static async Task StartInit()
         {
-            var DbSet = await Reading<Models.Models>.ReadModel("DbSet.txt");
+            string path = Path.Combine(Variables.NameOfDB, "DbSet.txt");
+            var DbSet = await Reading<Models.Models>.ReadModel(path);
             if (DbSet.Count>0)
             {
                 Variables.DbSet = DbSet;

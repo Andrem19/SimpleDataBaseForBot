@@ -31,7 +31,7 @@ namespace SimpleDataBase.DataBase.Core
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
             int ind = Variables.DbSet.FindIndex(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[ind].Id}-{Variables.DbSet[ind].Name}.txt");
+            string path = Path.Combine(Variables.NameOfDB, "DbModels", $"{Variables.DbSet[ind].Id}-{Variables.DbSet[ind].Name}.txt");
             return await Reading<T>.ReadModel(path);
         }
         ///<summary>
@@ -43,7 +43,7 @@ namespace SimpleDataBase.DataBase.Core
                 name = typeof(T).Name;
 
             int index = Variables.DbSet.FindIndex(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
+            string path = Path.Combine(Variables.NameOfDB, "DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
             var tempModel = data.FirstOrDefault(x => x.Id == model.Id);
             data.Remove(tempModel);
@@ -55,7 +55,7 @@ namespace SimpleDataBase.DataBase.Core
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
             int index = Variables.DbSet.FindIndex(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
+            string path = Path.Combine(Variables.NameOfDB, "DbModels", $"{Variables.DbSet[index].Id}-{name}.txt");
             File.Delete(path);
             Variables.DbSet.RemoveAt(index);
             if (Variables.DbSet.Count > 0)
@@ -76,7 +76,7 @@ namespace SimpleDataBase.DataBase.Core
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
             var set = Variables.DbSet.FirstOrDefault(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{set.Id}-{name}.txt");
+            string path = Path.Combine(Variables.NameOfDB, "DbModels", $"{set.Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
             var mod = data.FirstOrDefault(x => x.Id == model.Id);
             data.Remove(mod);
@@ -103,7 +103,7 @@ namespace SimpleDataBase.DataBase.Core
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
             var set = Variables.DbSet.FirstOrDefault(x => x.Name == name);
-            string path = Path.Combine("DbModels", $"{set.Id}-{name}.txt");
+            string path = Path.Combine(Variables.NameOfDB, "DbModels", $"{set.Id}-{name}.txt");
             List<T> data = await Reading<T>.ReadModel(path);
             var model = data.FirstOrDefault(x => x.Id == id);
             data.Remove(model);

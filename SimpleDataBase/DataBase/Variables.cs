@@ -8,6 +8,7 @@ namespace SimpleDataBase.DataBase
 {
     public static class Variables
     {
+        public static string NameOfDB { get; set; } = "TestDB";
         public static List<Models.Models> DbSet { get; set; } = new List<Models.Models>();
     }
 }
